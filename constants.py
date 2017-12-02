@@ -11,3 +11,4 @@ ZOMATO_REVIEW_API = 'https://developers.zomato.com/api/v2.1/reviews'
 
 # MERCHAT API
 PRONTO_MERCHANT_API = 'http://earthmaniebo.com/api/merchants'
+PRONTO_CHECKOUT_API = 'http://earthmaniebo.com/api/orders'

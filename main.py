@@ -53,8 +53,22 @@ def get_food(food):
     return result['parsed'][0]['food']['uri']
 
 
-# @app.route('/py/pronto-py/api/pay', methods=['POST'])
-# def pay():
+@app.route('/py/pronto-py/api/checkout', methods=['POST'])
+def checkout():
+    content = request.get_json()
+    merchant_id = content['merchant_id']
+    product_id = content['product_id']
+    quantity = content['quantity']
+
+    params = {
+        'merchant_id': merchant_id,
+        'product_id': product_id,
+        'quantity': quantity,
+    }
+    req = requests.post(constants.PRONTO_CHECKOUT_API, json=params)
+    result = req.json()
+    return result
+
 
 def get_nutrients(food_uri):
     params = {
