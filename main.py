@@ -53,6 +53,9 @@ def get_food(food):
     return result['parsed'][0]['food']['uri']
 
 
+# @app.route('/py/pronto-py/api/pay', methods=['POST'])
+# def pay():
+
 def get_nutrients(food_uri):
     params = {
         'yield': 1,
@@ -107,6 +110,8 @@ def get_restos(food):
         resto['address'] = item['restaurant']['location']['address']
         resto['url'] = item['restaurant']['url']
         resto['image'] = item['restaurant']['thumb']
+        rating = item['restaurant']['user_rating']['aggregate_rating']
+        resto['rating'] = float(rating) if rating != '0' else 4.5
         resto['is_pronto_merchant'] = False
         resto['products'] = []
         resto_data.append(resto)
