@@ -108,6 +108,7 @@ def get_restos(food):
         resto['url'] = item['restaurant']['url']
         resto['image'] = item['restaurant']['thumb']
         resto['is_pronto_merchant'] = False
+        resto['products'] = []
         resto_data.append(resto)
 
     reviews = get_reviews(result['restaurants'][3]['restaurant']['id'])
@@ -115,6 +116,7 @@ def get_restos(food):
     for index, merchant in enumerate(merchants):
         for index, resto in enumerate(resto_data):
             if merchant['id'] == resto['id']:
+                merchant['products'] = merchant['products']['data']
                 resto_data[index] = merchants[index]
                 break
     data = {
