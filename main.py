@@ -2,18 +2,14 @@
 
 import math
 import json
-import helpers
 import constants
 import requests
-import api_manager
 
 from flask import Flask, jsonify
 from flask import request
 
 app = Flask(__name__)
 app.config['JSONIFY_PRETTYPRINT_REGULAR'] = True
-app.config['UPLOAD_FOLDER'] = 'static/uploads'
-app.config['ALLOWED_EXTENSIONS'] = set(['png', 'jpg', 'jpeg'])
 
 
 @app.route('/pronto-py/api')
@@ -31,25 +27,30 @@ def get_info():
     food_uri = get_food(food)
 
     # Call edamam for nutrients
-    nutrients = get_nutrients(food_uri)
-    nutrients['name'] = food
-    return jsonify(nutrients)
+    data = get_nutrients(food_uri)
+
+    # Call zomato to get resto
+    restos = get_restos(food)
+
+    data['name'] = food
+    data['restaurants'] = restos
+    return jsonify(data)
 
 
 def get_food(food):
-    data = {
+    params = {
         'ingr': food,
         'app_id': constants.EDAMAM_APP_ID,
         'app_key': constants.EDAMAM_APP_KEY,
         'page': 0,
     }
-    req = api_manager.get_request(constants.EDAMAM_FOOD_API, data=data)
+    req = requests.get(constants.EDAMAM_FOOD_API, params=params)
     result = req.json()
     return result['parsed'][0]['food']['uri']
 
 
 def get_nutrients(food_uri):
-    food_data = {
+    params = {
         'yield': 1,
         'ingredients': [
             {
@@ -63,7 +64,7 @@ def get_nutrients(food_uri):
         app_id=constants.EDAMAM_APP_ID,
         app_key=constants.EDAMAM_APP_KEY,
     )
-    req = api_manager.post_request(url, data=food_data)
+    req = requests.post(url, json=params)
     result = req.json()
 
     data = dict()
@@ -79,6 +80,30 @@ def get_nutrients(food_uri):
     data['nutrients'] = nutrients
     return data
 
+
+def get_restos(food):
+    params = {
+        'q': food,
+        'lat': 14.551418,
+        'lon': 120.9871303
+    }
+    headers = {
+        "USER-KEY": constants.ZOMATO_API_KEY,
+        "Accept": 'application/json'
+    }
+    req = requests.get(constants.ZOMATO_SEARCH_API, params=params, headers=headers)
+    result = req.json()
+    data = []
+
+    for item in result['restaurants']:
+        resto = dict()
+        resto['name'] = item['restaurant']['name']
+        resto['id'] = item['restaurant']['id']
+        resto['address'] = item['restaurant']['location']['address']
+        resto['url'] = item['restaurant']['url']
+        resto['image'] = item['restaurant']['thumb']
+        data.append(resto)
+    return data
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', threaded=True)
