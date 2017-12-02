@@ -85,7 +85,8 @@ def get_restos(food):
     params = {
         'q': food,
         'lat': 14.551418,
-        'lon': 120.9871303
+        'lon': 120.9871303,
+        'count': 10,
     }
     headers = {
         "USER-KEY": constants.ZOMATO_API_KEY,
