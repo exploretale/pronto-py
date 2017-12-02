@@ -30,10 +30,11 @@ def get_info():
     data = get_nutrients(food_uri)
 
     # Call zomato to get resto
-    restos = get_restos(food)
+    resto_data = get_restos(food)
 
     data['name'] = food
-    data['restaurants'] = restos
+    data['restaurants'] = resto_data['restaurants']
+    data['reviews'] = resto_data['reviews']
     return jsonify(data)
 
 
@@ -89,12 +90,12 @@ def get_restos(food):
         'count': 10,
     }
     headers = {
-        "USER-KEY": constants.ZOMATO_API_KEY,
+        "user-key": constants.ZOMATO_API_KEY,
         "Accept": 'application/json'
     }
     req = requests.get(constants.ZOMATO_SEARCH_API, params=params, headers=headers)
     result = req.json()
-    data = []
+    resto_data = []
 
     for item in result['restaurants']:
         resto = {}
@@ -103,7 +104,32 @@ def get_restos(food):
         resto['address'] = item['restaurant']['location']['address']
         resto['url'] = item['restaurant']['url']
         resto['image'] = item['restaurant']['thumb']
-        data.append(resto)
+        resto_data.append(resto)
+
+    reviews = get_reviews(result['restaurants'][0]['restaurant']['id'])
+    data = {
+        'restaurants': resto_data,
+        'reviews': reviews
+    }
+    return data
+
+def get_reviews(resto_id):
+    params = {
+        'res_id': resto_id
+    }
+    headers = {
+        "user-key": constants.ZOMATO_API_KEY,
+        "Accept": 'application/json'
+    }
+    req = requests.get(constants.ZOMATO_REVIEW_API, params=params, headers=headers)
+    result = req.json()
+    data = []
+    for item in result['user_reviews']:
+        review = {}
+        review['rating'] = item['review']['rating']
+        review['title'] = item['review']['rating_text']
+        review['body'] = item['review']['review_text']
+        data.append(review)
     return data
 
 if __name__ == '__main__':

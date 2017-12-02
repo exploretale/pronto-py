@@ -7,3 +7,4 @@ EDAMAM_NUTRIENTS_API = 'https://api.edamam.com/api/food-database/nutrients?app_i
 # ZOMATO
 ZOMATO_API_KEY = '6c100e8cb0f69c1d546bbb3c9e6fab5b'
 ZOMATO_SEARCH_API = 'https://developers.zomato.com/api/v2.1/search'
+ZOMATO_REVIEW_API = 'https://developers.zomato.com/api/v2.1/reviews'
