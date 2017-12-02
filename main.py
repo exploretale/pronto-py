@@ -4,7 +4,7 @@ import helpers
 import constants
 import requests
 import api_manager
-import xmltodict as xdict
+import image_search
 
 from flask import Flask, jsonify
 from flask import request
@@ -28,9 +28,10 @@ def get_info():
     else:
         image_url = helpers.upload(image)
 
-    return jsonify({
-        'image_url': image_url
-    })
+    code = image_search.do_image_search(image_url)
+    results = image_search.parse_results(code)
+
+    return results
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', threaded=True)

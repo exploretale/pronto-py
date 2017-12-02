@@ -1,7 +1,9 @@
-import argparse
+# -*- coding: utf-8 -*-
+
 import pycurl
 import json
-from flask import Flask, url_for, json, request
+import constants
+from flask import current_app as app
 python3 = False
 try:
     from StringIO import StringIO
@@ -12,28 +14,15 @@ from bs4 import BeautifulSoup
 if python3:
     import certifi
 
-SEARCH_URL = 'https://www.google.com/searchbyimage?&image_url='
 
-app = Flask(__name__)
-
-@app.route('/search', methods = ['POST'])
-def search():
-    if request.headers['Content-Type'] != 'application/json':
-        return "Requests must be in JSON format. Please make sure the header is 'application/json' and the JSON is valid."
-
-    client_json = json.dumps(request.json)
-    client_data = json.loads(client_json)
-    code = doImageSearch(client_data['image_url'])
-    return parseResults(code)
-
-def doImageSearch(image_url):
+def do_image_search(image_url):
     """Perform the image search and return the HTML page response."""
 
     if python3:
         returned_code = bytesIOModule.BytesIO()
     else:
         returned_code = StringIO()
-    full_url = SEARCH_URL + image_url
+    full_url = constants.GOOGLE_SEARCH_URL + image_url
 
     if app.debug:
         print('POST: ' + full_url)
@@ -53,7 +42,7 @@ def doImageSearch(image_url):
     else:
         return returned_code.getvalue()
 
-def parseResults(code):
+def parse_results(code):
     """Parse/Scrape the HTML code for the info we want."""
 
     soup = BeautifulSoup(code, 'html.parser')
@@ -85,17 +74,3 @@ def parseResults(code):
       results['best_guess'] = best_guess.get_text()
 
     return json.dumps(results)
-
-def main():
-    parser = argparse.ArgumentParser(description='Meta Reverse Image Search API')
-    parser.add_argument('-p', '--port', type=int, default=5000, help='port number')
-    parser.add_argument('--debug', action='store_true', help='enable debug mode')
-    args = parser.parse_args()
-
-    if args.debug:
-        app.debug = True
-
-    app.run(host='0.0.0.0', port=args.port, debug=True)
-
-if __name__ == '__main__':
-    main()
