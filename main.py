@@ -20,7 +20,7 @@ def hello_world():
 @app.route('/pronto-py/api/search', methods=['GET'])
 def get_info():
     search = request.args.get('food')
-    results = dict()
+
     food = search.replace('_', ' ').title()
 
     # Call edamam for food_urid parser
@@ -67,12 +67,12 @@ def get_nutrients(food_uri):
     req = requests.post(url, json=params)
     result = req.json()
 
-    data = dict()
+    data = {}
     data['calories'] = result['calories']
 
     nutrients = []
     for item in result['totalNutrients']:
-        nutri = dict()
+        nutri = {}
         nutri['label'] = result['totalNutrients'][item]['label']
         nutri['unit'] = result['totalNutrients'][item]['unit']
         nutri['quantity'] = math.ceil(result['totalNutrients'][item]['quantity'] * 100) / 100.0
@@ -96,7 +96,7 @@ def get_restos(food):
     data = []
 
     for item in result['restaurants']:
-        resto = dict()
+        resto = {}
         resto['name'] = item['restaurant']['name']
         resto['id'] = item['restaurant']['id']
         resto['address'] = item['restaurant']['location']['address']
