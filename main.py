@@ -25,9 +25,9 @@ def hello_world():
 def get_info():
     search = request.args.get('food')
     results = dict()
-    food = constants.food_101[search]
+    food = search.replace('_', ' ').title()
 
-    # Call edamam for food parser
+    # Call edamam for food_urid parser
     food_uri = get_food(food)
 
     # Call edamam for nutrients
