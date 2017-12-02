@@ -12,12 +12,12 @@ app = Flask(__name__)
 app.config['JSONIFY_PRETTYPRINT_REGULAR'] = True
 
 
-@app.route('/')
+@app.route('/pronto-py/api')
 def hello_world():
     return 'Python API for UHAC.'
 
 
-@app.route('/books', methods=['GET'])
+@app.route('/pronto-py/api/books', methods=['GET'])
 def get_books():
     name = request.args.get('title')
     url_goodreads = 'https://www.goodreads.com/book/title.xml'
