@@ -107,14 +107,22 @@ def get_restos(food):
         resto['address'] = item['restaurant']['location']['address']
         resto['url'] = item['restaurant']['url']
         resto['image'] = item['restaurant']['thumb']
+        resto['is_pronto_merchant'] = False
         resto_data.append(resto)
 
-    reviews = get_reviews(result['restaurants'][0]['restaurant']['id'])
+    reviews = get_reviews(result['restaurants'][3]['restaurant']['id'])
+    merchants = get_merchant_resto()
+    for index, merchant in enumerate(merchants):
+        for index, resto in enumerate(resto_data):
+            if merchant['id'] == resto['id']:
+                resto_data[index] = merchants[index]
+                break
     data = {
         'restaurants': resto_data,
         'reviews': reviews
     }
     return data
+
 
 def get_reviews(resto_id):
     params = {
@@ -134,6 +142,13 @@ def get_reviews(resto_id):
         review['body'] = item['review']['review_text']
         data.append(review)
     return data
+
+
+def get_merchant_resto():
+    req = requests.get(constants.PRONTO_MERCHANT_API)
+    result = req.json()
+    return result['data']
+
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', threaded=True)
