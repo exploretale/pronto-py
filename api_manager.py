@@ -4,9 +4,11 @@ import requests
 from flask import session, abort
 
 
-def get_request(url, data=None):
+def get_request(url, data=None, json=None):
     req = None
     try:
+        if data and json:
+            req = requests.get(url, params=data, json=json)
         if data:
             req = requests.get(url, params=data)
         else:
@@ -18,10 +20,12 @@ def get_request(url, data=None):
     return req
 
 
-def post_request(url, data=None, files=None):
+def post_request(url, data=None, files=None, params=None):
     req = None
     if files:
         req = requests.post(url, files=files)
+    elif data and params:
+        req = requests.post(url, params=params, json=data)
     elif data:
         req = requests.post(url, json=data)
     else:
