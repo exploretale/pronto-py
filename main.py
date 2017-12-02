@@ -15,12 +15,12 @@ app = Flask(__name__)
 app.config['JSONIFY_PRETTYPRINT_REGULAR'] = True
 
 
-@app.route('/api/py/pronto-py')
+@app.route('/pronto-py/api')
 def hello_world():
     return 'Python API for UHAC.'
 
 
-@app.route('/api/py/pronto-py/search', methods=['GET'])
+@app.route('/pronto-py/api/search', methods=['GET'])
 def get_info():
     search = request.args.get('food')
 
@@ -136,4 +136,4 @@ def get_reviews(resto_id):
     return data
 
 if __name__ == '__main__':
-    app.run(debug=True, host='127.0.0.1', threaded=True)
+    app.run(debug=True, host='0.0.0.0', threaded=True)
