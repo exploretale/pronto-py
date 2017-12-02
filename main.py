@@ -159,7 +159,7 @@ def get_reviews(resto_id):
     data = []
     for item in result['user_reviews']:
         review = {}
-        review['rating'] = item['review']['rating']
+        review['rating'] = round(float(item['review']['rating']), 0)
         review['title'] = item['review']['rating_text']
         review['body'] = item['review']['review_text']
         data.append(review)
