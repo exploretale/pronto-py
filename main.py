@@ -28,6 +28,9 @@ def get_info():
     else:
         image_url = helpers.upload(image)
 
+    return jsonify({
+        'image_url': image_url
+    })
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', threaded=True)
