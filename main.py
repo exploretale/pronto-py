@@ -65,8 +65,9 @@ def checkout():
         'product_id': product_id,
         'quantity': quantity,
     }
-    req = requests.post(constants.PRONTO_CHECKOUT_API, json=params)
+    req = requests.post(constants.PRONTO_CHECKOUT_API, data=params)
     result = req.json()
+    print req.text
     return result
 
 
