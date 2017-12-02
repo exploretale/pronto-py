@@ -9,7 +9,7 @@ import requests_cache
 from flask import Flask, jsonify
 from flask import request
 
-requests_cache.install_cache(cache_name='pronto_cache', backend='sqlite', expire_after=60000)
+requests_cache.install_cache(cache_name='pronto_cache', backend='sqlite', expire_after=600000)
 
 app = Flask(__name__)
 app.config['JSONIFY_PRETTYPRINT_REGULAR'] = True
