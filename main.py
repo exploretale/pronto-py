@@ -98,7 +98,7 @@ def get_nutrients(food_uri):
         nutri['unit'] = result['totalNutrients'][item]['unit']
         nutri['quantity'] = math.ceil(result['totalNutrients'][item]['quantity'] * 100) / 100.0
         nutrients.append(nutri)
-    data['nutrients'] = nutrients
+    data['nutrients'] = nutrients[:10]
     return data
 
 
