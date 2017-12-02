@@ -1,0 +1,2 @@
+SERVER_BASE_URL = '128.199.217.76:5000/pronto-py/'
+IMAGE_UPLOAD_DIR = SERVER_BASE_URL + '/static/uploads/'
