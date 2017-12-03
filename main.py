@@ -67,7 +67,6 @@ def checkout():
     }
     req = requests.post(constants.PRONTO_CHECKOUT_API, data=params)
     result = req.json()
-    print req.text
     return result
 
 
@@ -129,6 +128,7 @@ def get_restos(food):
         rating = item['restaurant']['user_rating']['aggregate_rating']
         resto['rating'] = round(float(rating), 0) if rating != '0' else 4
         resto['is_pronto_merchant'] = False
+        resto['merchant_id'] = ""
         resto['products'] = []
         resto_data.append(resto)
 
