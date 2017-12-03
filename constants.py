@@ -1,6 +1,6 @@
 # EDAMAM
-EDAMAM_APP_ID = 'a003d96a'
-EDAMAM_APP_KEY = '082339132ab1c90f38c02abd200a7f49'
+EDAMAM_APP_ID = '359e6077'
+EDAMAM_APP_KEY = '05eb4ef96996afc33c4070b31c6e324e'
 EDAMAM_FOOD_API = 'https://api.edamam.com/api/food-database/parser'
 EDAMAM_NUTRIENTS_API = 'https://api.edamam.com/api/food-database/nutrients?app_id={app_id}&app_key={app_key}'
 
